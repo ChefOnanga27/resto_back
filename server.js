@@ -5,13 +5,18 @@ const sequelize = require("./config/db"); // ✅ Import correct
 
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+
 
 // Middleware pour autoriser les requêtes CORS
 app.use(cors());
 // Middleware pour parser les données JSON dans les requêtes
 app.use(express.json());
 
+//route de l\api
+
+app.get("/", (req, res) => {
+  res.send("API en ligne !");
+});
 // Import des routes
 const userRoutes = require("./routes/users");
 const recipeRoutes = require("./routes/recette");
@@ -25,11 +30,9 @@ app.use("/api/commentaire", commentRoutes);
 sequelize.sync({ force: true })  // force: true pour supprimer et recréer les tables
   .then(() => {
     console.log("La base de données a été synchronisée");
-    
-    app.get("/", (req, res) => {
-      res.send("L'API fonctionne !");
-  });
-    // Démarrer le serveur après la synchronisation
+
+   // Démarrer le serveur après la synchronisation
+   const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
       console.log(`Serveur démarré sur le port ${PORT}`);
     });
