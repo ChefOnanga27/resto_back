@@ -25,6 +25,10 @@ app.use("/api/commentaire", commentRoutes);
 sequelize.sync({ force: true })  // force: true pour supprimer et recréer les tables
   .then(() => {
     console.log("La base de données a été synchronisée");
+    
+    app.get("/", (req, res) => {
+      res.send("L'API fonctionne !");
+  });
     // Démarrer le serveur après la synchronisation
     app.listen(PORT, () => {
       console.log(`Serveur démarré sur le port ${PORT}`);
