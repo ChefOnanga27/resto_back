@@ -27,7 +27,7 @@ app.use("/api/recette", recipeRoutes);
 app.use("/api/commentaire", commentRoutes);
 
 // Synchronisation de la base de données
-sequelize.sync({ force: true })  // force: true pour supprimer et recréer les tables
+sequelize.sync({ force: false })  // force: true pour supprimer et recréer les tables
   .then(() => {
     console.log("La base de données a été synchronisée");
 

@@ -1,4 +1,4 @@
-const Commentaire = require('../models/Commentaire'); // Import du modèle
+const Commentaire = require('../models/commentaire'); // Import du modèle
 
 // Créer un commentaire
 exports.createCommentaire = async (req, res) => {
