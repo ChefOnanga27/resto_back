@@ -60,6 +60,63 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({ message: "Erreur lors de la connexion" });
   }
 };
+// Récupérer le profil de l'utilisateur connecté
+exports.getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] }, // Exclure le mot de passe de la réponse
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur lors de la récupération du profil" });
+  }
+};
+// Mettre à jour le profil de l'utilisateur connecté
+exports.updateUserProfile = async (req, res) => {
+  try {
+    const { name, email, bio, location, avatar } = req.body;
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    // Mise à jour des informations
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.bio = bio || user.bio;
+    user.location = location || user.location;
+    user.avatar = avatar || user.avatar;
+
+    await user.save();
+    res.status(200).json({ message: "Profil mis à jour avec succès", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur lors de la mise à jour du profil" });
+  }
+};
+// Supprimer le compte de l'utilisateur connecté
+exports.deleteUserProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    await user.destroy();
+    res.status(200).json({ message: "Compte supprimé avec succès" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur lors de la suppression du compte" });
+  }
+};
+
 
 // Récupérer tous les utilisateurs (Uniquement pour les admins)
 exports.getAllUsers = async (req, res) => {
